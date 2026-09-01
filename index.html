@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salchipaperia "El Rodante" - Menú</title>
+    <!-- Importar Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Banner de Horario (Oculto por defecto) -->
+    <div id="closed-banner" style="display: none; background: #ff4757; color: white; text-align: center; padding: 10px; font-weight: bold; position: sticky; top: 0; z-index: 1000;">
+        ¡Estamos descansando! 😴 Nuestro horario de atención es de 6:00 PM a 11:30 PM.
+    </div>
+
+    <header>
+        <div class="header-container">
+            <h1>🍔 El Rodante</h1>
+            <div class="header-actions">
+                <button id="btn-mis-pedidos" class="btn-mis-pedidos">Mis Pedidos</button>
+                <div class="cart-icon" id="cart-icon">
+                    🛒 <span id="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="menu-section">
+            <h2>Nuestro Menú</h2>
+            <div id="products-grid" class="products-grid">
+                <!-- Los productos se cargarán aquí desde Supabase -->
+                <p class="loading">Cargando productos...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal del carrito -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-cart">&times;</span>
+            <h2>Tu Pedido</h2>
+            <div id="cart-items" class="cart-items">
+                <!-- Items del carrito -->
+            </div>
+            
+            <div class="cart-summary">
+                <h3>Subtotal: <span id="cart-subtotal">S/ 0.00</span></h3>
+                <h3>Total: <span id="cart-total">S/ 0.00</span></h3>
+            </div>
+
+            <hr>
+
+            <form id="checkout-form" class="checkout-form">
+                <h3>Datos de envío</h3>
+                <div class="form-group">
+                    <label for="c-name">Nombre completo *</label>
+                    <input type="text" id="c-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="c-phone">Teléfono (WhatsApp) *</label>
+                    <input type="tel" id="c-phone" value="+51 " required>
+                </div>
+                <div class="form-group">
+                    <label for="c-address">Dirección de entrega *</label>
+                    <input type="text" id="c-address" required>
+                </div>
+                <div class="form-group">
+                    <label for="c-payment">Método de pago *</label>
+                    <select id="c-payment" required>
+                        <option value="Yape">Yape</option>
+                        <option value="Plin">Plin</option>
+                        <option value="Efectivo">Efectivo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="c-notes">Observaciones (Opcional)</label>
+                    <textarea id="c-notes" rows="2" placeholder="Ej. Sin cremas, ají aparte..."></textarea>
+                </div>
+
+                <div id="checkout-msg"></div>
+                <button type="submit" id="btn-checkout" class="btn-primary">REALIZAR PEDIDO</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Upselling -->
+    <div id="upsell-modal" class="modal">
+        <div class="modal-content success-content" style="text-align: center;">
+            <h2 style="color: #ff4757; margin-bottom: 10px;">¡Espera! ¿Te falta algo? 🤤</h2>
+            <img src="https://via.placeholder.com/150x150?text=Gaseosa" alt="Upsell" style="border-radius: 10px; margin: 10px auto; width: 150px; height: 150px; object-fit: cover; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <p style="font-size: 1.1rem; margin-bottom: 15px;">¿Deseas agregar una <strong>Inka Cola helada (500ml)</strong> a tu pedido por solo <strong>S/ 3.00</strong>?</p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button id="btn-upsell-yes" class="btn-primary" style="flex: 1; padding: 12px; font-size: 1.1rem;">¡Sí, agrégalo!</button>
+                <button id="btn-upsell-no" class="btn-secondary" style="flex: 1; padding: 12px; font-size: 1.1rem;">No, gracias</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensaje de éxito -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content success-content">
+            <h2>✅ ¡Pedido realizado correctamente!</h2>
+            <p>Número de pedido: <strong id="success-order-id"></strong></p>
+            <p>Tu pedido fue recibido correctamente. El vendedor comenzará a procesarlo.</p>
+            <a href="#" id="whatsapp-link" target="_blank" class="btn-whatsapp">Enviar a WhatsApp</a>
+            <br><br>
+            <button id="close-success" class="btn-secondary">Volver al Menú</button>
+        </div>
+    </div>
+
+    <!-- Modal de Mis Pedidos -->
+    <div id="orders-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-orders">&times;</span>
+            <h2>Mis Pedidos</h2>
+            <p style="font-size: 0.9em; color: #747d8c; margin-bottom: 1rem;">Historial de pedidos realizados desde este dispositivo.</p>
+            
+            <div id="my-orders-container" class="my-orders-container">
+                <!-- Pedidos inyectados por JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/supabase-client.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
