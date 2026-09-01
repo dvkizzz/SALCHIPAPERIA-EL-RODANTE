@@ -3,12 +3,17 @@
     --primary-hover: #ff6b81;
     --secondary-color: #1a365d;
     --bg-color: #0B192C;
-    --card-bg: #ffffff;
-    --text-dark: #2f3542;
-    --text-light: #747d8c;
-    --border-radius: 12px;
-    --shadow: 0 8px 16px rgba(0,0,0,0.08);
+    --glass-bg: rgba(255, 255, 255, 0.04);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --text-dark: #f1f2f6; /* White text for dark mode */
+    --text-light: #a4b0be;
+    --border-radius: 16px;
+    --shadow: 0 8px 32px rgba(0,0,0,0.3);
     --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    /* Neon Colors */
+    --neon-green: #00E676;
+    --neon-blue: #00E5FF;
 }
 
 * {
@@ -20,12 +25,15 @@
 
 body {
     background-color: var(--bg-color);
+    background-image: radial-gradient(circle at 15% 50%, rgba(26, 54, 93, 0.4), transparent 50%),
+                      radial-gradient(circle at 85% 30%, rgba(255, 71, 87, 0.15), transparent 50%);
     color: var(--text-dark);
 }
 
 header {
-    background: var(--card-bg);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    background: rgba(11, 25, 44, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--glass-border);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -41,38 +49,59 @@ header {
 }
 
 h1 {
-    color: var(--primary-color);
+    color: white;
     font-weight: 800;
     font-size: 1.8rem;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.header-actions { display: flex; align-items: center; gap: 15px; }
+
+.btn-mis-pedidos { 
+    background: rgba(255,255,255,0.1); 
+    color: white; 
+    border: 1px solid var(--glass-border); 
+    padding: 10px 15px; 
+    border-radius: 8px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: var(--transition); 
+}
+.btn-mis-pedidos:hover { 
+    background: rgba(255,255,255,0.2); 
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
 }
 
 .cart-icon {
     font-size: 1.5rem;
     cursor: pointer;
     position: relative;
-    padding: 0.5rem;
-    border-radius: 50%;
+    padding: 0.6rem;
+    border-radius: 12px;
     transition: var(--transition);
-    background: rgba(255, 71, 87, 0.1);
+    background: rgba(255, 71, 87, 0.15);
     color: var(--primary-color);
+    border: 1px solid rgba(255, 71, 87, 0.3);
 }
 
 .cart-icon:hover {
     background: var(--primary-color);
     color: white;
     transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255,71,87,0.4);
 }
 
 #cart-count {
     position: absolute;
     top: -5px;
     right: -5px;
-    background: var(--secondary-color);
-    color: white;
-    font-size: 0.8rem;
-    font-weight: bold;
-    padding: 2px 6px;
+    background: var(--neon-blue);
+    color: #0B192C;
+    font-size: 0.85rem;
+    font-weight: 900;
+    padding: 2px 8px;
     border-radius: 10px;
+    box-shadow: 0 0 10px var(--neon-blue);
 }
 
 main {
@@ -86,6 +115,8 @@ main {
     font-size: 2rem;
     color: white;
     text-align: center;
+    font-weight: 800;
+    text-shadow: 0 0 15px rgba(255,255,255,0.2);
 }
 
 .products-grid {
@@ -94,12 +125,16 @@ main {
     gap: 2rem;
 }
 
+/* Glassmorphism Product Card */
 .product-card {
-    background: var(--card-bg);
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
     border-radius: var(--border-radius);
     padding: 1.5rem;
     box-shadow: var(--shadow);
-    transition: var(--transition);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -107,66 +142,80 @@ main {
 }
 
 .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    border-color: rgba(255,255,255,0.2);
 }
 
 .product-img {
     width: 100%;
     height: 180px;
     object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    background: #eccc68; /* Fallback */
+    border-radius: 12px;
+    margin-bottom: 1.2rem;
+    background: rgba(0,0,0,0.2);
 }
 
 .product-info h3 {
     font-size: 1.3rem;
     margin-bottom: 0.5rem;
+    color: white;
+    font-weight: 700;
 }
 
 .product-info p {
     color: var(--text-light);
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
     flex-grow: 1;
+    line-height: 1.5;
 }
 
 .product-price {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 800;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
+    color: var(--neon-green);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(0, 230, 118, 0.3);
 }
 
 .product-stock {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: var(--text-light);
-    margin-bottom: 1rem;
+    margin-bottom: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .btn-add {
-    background: var(--primary-color);
-    color: white;
-    border: none;
+    background: rgba(255, 71, 87, 0.1);
+    color: var(--primary-color);
+    border: 1px solid rgba(255, 71, 87, 0.5);
     padding: 0.8rem;
-    border-radius: 8px;
-    font-weight: 600;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
     cursor: pointer;
     transition: var(--transition);
     width: 100%;
 }
 
 .btn-add:hover {
-    background: var(--primary-hover);
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 0 15px rgba(255,71,87,0.5);
+    border-color: var(--primary-color);
 }
 
 .btn-add:disabled {
-    background: #ced6e0;
+    background: rgba(255,255,255,0.05);
+    color: var(--text-light);
+    border-color: var(--glass-border);
     cursor: not-allowed;
+    box-shadow: none;
 }
 
-/* Modals */
+/* Modals (Glassmorphism) */
 .modal {
     display: none;
     position: fixed;
@@ -175,34 +224,35 @@ main {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(47, 53, 66, 0.8);
-    backdrop-filter: blur(4px);
+    background-color: rgba(11, 25, 44, 0.85);
+    backdrop-filter: blur(8px);
     overflow-y: auto;
 }
 
 .modal-content {
-    background-color: var(--card-bg);
+    background: #152238;
     margin: 5% auto;
-    padding: 2rem;
-    border-radius: var(--border-radius);
+    padding: 2.5rem;
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
     width: 90%;
-    max-width: 500px;
-    box-shadow: 0 24px 48px rgba(0,0,0,0.2);
+    max-width: 550px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
     position: relative;
-    animation: slideIn 0.3s ease;
+    animation: modalSlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-@keyframes slideIn {
-    from { transform: translateY(-30px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+@keyframes modalSlideUp {
+    from { transform: translateY(30px) scale(0.95); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 .close-btn {
-    color: #a4b0be;
+    color: var(--text-light);
     position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 28px;
+    top: 20px;
+    right: 25px;
+    font-size: 32px;
     font-weight: bold;
     cursor: pointer;
     transition: var(--transition);
@@ -210,12 +260,20 @@ main {
 
 .close-btn:hover {
     color: var(--primary-color);
+    transform: scale(1.1);
 }
 
+.modal-content h2 { color: white; border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+
+/* Cart Items inside Modal */
 .cart-items {
     max-height: 300px;
     overflow-y: auto;
     margin: 1.5rem 0;
+    background: rgba(0,0,0,0.2);
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
 }
 
 .cart-item {
@@ -223,156 +281,171 @@ main {
     justify-content: space-between;
     align-items: center;
     padding: 1rem 0;
-    border-bottom: 1px solid #dfe4ea;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
 }
+.cart-item:last-child { border: none; padding-bottom: 0; }
 
-.cart-item-info h4 {
-    font-size: 1.1rem;
-}
+.cart-item-info h4 { font-size: 1.1rem; color: white; margin-bottom: 0.3rem;}
+.cart-item-info p { color: var(--neon-green); font-weight: 700; }
 
-.cart-item-info p {
-    color: var(--primary-color);
-    font-weight: 600;
-}
-
-.cart-item-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+.cart-item-actions { display: flex; align-items: center; gap: 10px; }
 
 .cart-item-actions button {
-    background: #f1f2f6;
-    border: none;
-    width: 28px;
-    height: 28px;
-    border-radius: 4px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 1px solid var(--glass-border);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
     transition: var(--transition);
 }
 
 .cart-item-actions button:hover {
-    background: #dfe4ea;
+    background: rgba(255,255,255,0.2);
 }
 
 .btn-remove {
     color: var(--primary-color) !important;
+    border-color: rgba(255,71,87,0.3) !important;
+}
+.btn-remove:hover {
+    background: rgba(255,71,87,0.1) !important;
 }
 
 .cart-summary {
     display: flex;
     justify-content: space-between;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: 800;
     margin: 1.5rem 0;
+    color: white;
 }
+.cart-summary span:last-child { color: var(--neon-green); text-shadow: 0 0 10px rgba(0,230,118,0.3);}
 
-.checkout-form .form-group {
-    margin-bottom: 1rem;
-}
-
+/* Checkout Form inside Modal */
+.checkout-form .form-group { margin-bottom: 1.5rem; }
 .checkout-form label {
     display: block;
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
     font-weight: 600;
+    color: var(--text-light);
 }
 
 .checkout-form input,
 .checkout-form select,
 .checkout-form textarea {
     width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #dfe4ea;
+    padding: 0.8rem 1rem;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--glass-border);
     border-radius: 8px;
+    color: white;
     font-family: inherit;
+    font-size: 1rem;
     transition: var(--transition);
+    outline: none;
 }
 
 .checkout-form input:focus,
 .checkout-form select:focus,
 .checkout-form textarea:focus {
-    outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
+    box-shadow: 0 0 10px rgba(255, 71, 87, 0.2);
 }
 
+.checkout-form select option { background: #152238; color: white; }
+
 .btn-primary {
-    background: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
     color: white;
     border: none;
-    padding: 1rem;
-    border-radius: 8px;
+    padding: 1.2rem;
+    border-radius: 12px;
     font-weight: 800;
     font-size: 1.1rem;
     cursor: pointer;
     width: 100%;
     margin-top: 1rem;
     transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(255,71,87,0.3);
 }
 
 .btn-primary:hover {
-    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255,71,87,0.5);
+    filter: brightness(1.1);
 }
 
-.success-content {
-    text-align: center;
-}
-
-.success-content h2 {
-    color: #2ed573;
-    margin-bottom: 1rem;
-}
+/* Success WhatsApp CTA */
+.success-content { text-align: center; }
+.success-content h2 { color: var(--neon-green); margin-bottom: 1rem; text-shadow: 0 0 10px rgba(0,230,118,0.3);}
 
 .btn-whatsapp {
     display: inline-block;
-    background: #25D366;
+    background: linear-gradient(135deg, #25D366, #128C7E);
     color: white;
-    padding: 1rem 2rem;
-    border-radius: 8px;
+    padding: 1.2rem 2.5rem;
+    border-radius: 12px;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 800;
+    font-size: 1.1rem;
     margin-top: 1.5rem;
     transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 4px 25px rgba(37, 211, 102, 0.6); }
+    100% { transform: scale(1); box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
 }
 
 .btn-whatsapp:hover {
-    background: #128C7E;
+    filter: brightness(1.1);
+    animation: none;
+    transform: translateY(-3px);
 }
 
 .btn-secondary {
-    background: transparent;
-    border: 1px solid #dfe4ea;
-    color: var(--text-dark);
-    padding: 0.8rem 1.5rem;
-    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-light);
+    padding: 1rem 2rem;
+    border-radius: 10px;
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
+    margin-top: 1rem;
 }
 
 .btn-secondary:hover {
-    background: #f1f2f6;
+    background: rgba(255,255,255,0.1);
+    color: white;
 }
 
 #checkout-msg {
-    margin-top: 10px;
+    margin-top: 15px;
     color: var(--primary-color);
     font-weight: 600;
     text-align: center;
 }
 
-/* Estilos para Mis Pedidos */
-.header-actions { display: flex; align-items: center; gap: 15px; }
-.btn-mis-pedidos { background: var(--primary-color); color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: var(--transition); }
-.btn-mis-pedidos:hover { background: var(--primary-hover); }
-.my-order-card { border: 1px solid #dfe4ea; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
-.my-order-header { display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: bold; }
-.tracking-timeline { display: flex; flex-direction: column; gap: 10px; }
-.tracking-step { display: flex; align-items: center; gap: 10px; color: #a4b0be; }
-.tracking-step.completed { color: #2ed573; font-weight: bold; }
-.tracking-step.current { color: #1e90ff; font-weight: bold; }
-.tracking-step.rejected { color: #ff4757; font-weight: bold; }
-.tracking-icon { font-size: 1.2em; }
-
+/* My Orders Tracking Modal */
+.my-order-card { 
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--glass-border); 
+    border-radius: 12px; 
+    padding: 1.5rem; 
+    margin-bottom: 1.5rem; 
+}
+.my-order-header { display: flex; justify-content: space-between; margin-bottom: 1rem; font-weight: bold; color: white; font-size: 1.1rem;}
+.tracking-timeline { display: flex; flex-direction: column; gap: 15px; }
+.tracking-step { display: flex; align-items: center; gap: 15px; color: var(--text-light); transition: 0.3s; }
+.tracking-step.completed { color: var(--neon-green); font-weight: bold; text-shadow: 0 0 5px rgba(0,230,118,0.3);}
+.tracking-step.current { color: var(--neon-blue); font-weight: bold; text-shadow: 0 0 5px rgba(0,229,255,0.3); transform: scale(1.05); transform-origin: left;}
+.tracking-step.rejected { color: var(--neon-red); font-weight: bold; text-shadow: 0 0 5px rgba(255,23,68,0.3);}
+.tracking-icon { font-size: 1.5em; width: 30px; text-align: center; }
