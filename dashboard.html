@@ -14,7 +14,8 @@
             <h2>🍔 El Rodante</h2>
             <nav>
                 <ul>
-                    <li class="active"><a href="#">📦 Pedidos</a></li>
+                    <li class="active" id="nav-pedidos"><a href="#">📦 Pedidos</a></li>
+                    <li id="nav-productos"><a href="#">🍔 Productos</a></li>
                     <li><a href="#" id="btn-logout">🚪 Cerrar Sesión</a></li>
                 </ul>
             </nav>
@@ -65,7 +66,69 @@
                     </table>
                 </div>
             </section>
+            <section id="productos-section" class="productos-section" style="display: none;">
+                <div class="productos-header">
+                    <h2>Gestión de Productos</h2>
+                    <button id="btn-nuevo-producto" class="btn-primary">➕ Nuevo Producto</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="productos-table">
+                        <thead>
+                            <tr>
+                                <th>IMAGEN</th>
+                                <th>NOMBRE</th>
+                                <th>PRECIO</th>
+                                <th>STOCK</th>
+                                <th>ESTADO</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productos-tbody">
+                            <tr><td colspan="6" class="loading-msg">Cargando productos...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </main>
+    </div>
+
+    <!-- Modal Producto -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-product-modal">&times;</span>
+            <h2 id="product-modal-title">Nuevo Producto</h2>
+            <form id="product-form">
+                <input type="hidden" id="prod-id">
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" id="prod-nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea id="prod-desc"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Precio (S/)</label>
+                    <input type="number" step="0.01" id="prod-precio" required>
+                </div>
+                <div class="form-group">
+                    <label>Stock Inicial</label>
+                    <input type="number" id="prod-stock" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label>URL de Imagen</label>
+                    <input type="url" id="prod-imagen">
+                </div>
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select id="prod-estado">
+                        <option value="activo">Activo</option>
+                        <option value="inactivo">Inactivo</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary w-100">Guardar Producto</button>
+            </form>
+        </div>
     </div>
 
     <!-- Modal Detalles del Pedido -->

@@ -1,8 +1,8 @@
 :root {
     --primary-color: #ff4757;
     --primary-hover: #ff6b81;
-    --secondary-color: #2f3542;
-    --bg-color: #f1f2f6;
+    --secondary-color: #1a365d;
+    --bg-color: #0B192C;
     --card-bg: #ffffff;
     --text-dark: #2f3542;
     --text-light: #747d8c;
@@ -84,8 +84,8 @@ main {
 .menu-section h2 {
     margin-bottom: 2rem;
     font-size: 2rem;
+    color: white;
     text-align: center;
-    color: var(--secondary-color);
 }
 
 .products-grid {

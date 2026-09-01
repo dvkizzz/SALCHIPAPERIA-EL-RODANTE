@@ -1,5 +1,5 @@
-// Variables Globales
 let currentOrders = [];
+let currentProducts = [];
 
 // Elementos DOM
 const ordersTbody = document.getElementById('orders-tbody');
@@ -9,6 +9,18 @@ const orderDetailsContent = document.getElementById('order-details-content');
 const orderActions = document.getElementById('order-actions');
 const btnLogout = document.getElementById('btn-logout');
 const notifSound = document.getElementById('notification-sound');
+
+// Elementos Productos
+const navPedidos = document.getElementById('nav-pedidos');
+const navProductos = document.getElementById('nav-productos');
+const pedidosSection = document.querySelector('.orders-section');
+const statsSection = document.querySelector('.stats-grid');
+const productosSection = document.getElementById('productos-section');
+const productosTbody = document.getElementById('productos-tbody');
+const productModal = document.getElementById('product-modal');
+const closeProductModal = document.getElementById('close-product-modal');
+const productForm = document.getElementById('product-form');
+const btnNuevoProducto = document.getElementById('btn-nuevo-producto');
 
 // Inicializar
 document.addEventListener('DOMContentLoaded', async () => {
@@ -20,6 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     loadOrders();
+    loadProducts();
     subscribeToRealtime();
 });
 
@@ -28,6 +41,25 @@ btnLogout.addEventListener('click', async (e) => {
     e.preventDefault();
     await window.supabaseClient.auth.signOut();
     window.location.href = 'login.html';
+});
+
+// Navegación
+navPedidos.addEventListener('click', (e) => {
+    e.preventDefault();
+    navPedidos.classList.add('active');
+    navProductos.classList.remove('active');
+    pedidosSection.style.display = 'block';
+    statsSection.style.display = 'grid'; // as grid in css
+    productosSection.style.display = 'none';
+});
+
+navProductos.addEventListener('click', (e) => {
+    e.preventDefault();
+    navProductos.classList.add('active');
+    navPedidos.classList.remove('active');
+    pedidosSection.style.display = 'none';
+    statsSection.style.display = 'none';
+    productosSection.style.display = 'block';
 });
 
 // Cargar Pedidos
@@ -81,10 +113,10 @@ function updateStats() {
     const preparacion = currentOrders.filter(o => o.estado === 'en_preparacion').length;
     const enviados = currentOrders.filter(o => o.estado === 'enviado').length;
     
-    // Ventas del día (Solo entregados o enviados)
+    // Ventas del día (Solo entregados)
     const hoy = new Date().toLocaleDateString();
     const ventasDia = currentOrders
-        .filter(o => new Date(o.created_at).toLocaleDateString() === hoy && (o.estado === 'entregado' || o.estado === 'enviado'))
+        .filter(o => new Date(o.created_at).toLocaleDateString() === hoy && o.estado === 'entregado')
         .reduce((sum, o) => sum + parseFloat(o.total), 0);
 
     document.getElementById('stat-pendientes').innerText = pendientes;
@@ -315,4 +347,107 @@ closeModal.addEventListener('click', () => {
 });
 window.addEventListener('click', (e) => {
     if (e.target === orderModal) orderModal.style.display = 'none';
+    if (e.target === productModal) productModal.style.display = 'none';
 });
+
+// ==================== LÓGICA DE PRODUCTOS ====================
+
+async function loadProducts() {
+    try {
+        const { data, error } = await window.supabaseClient
+            .from('productos')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        currentProducts = data;
+        renderProducts();
+    } catch (error) {
+        console.error('Error al cargar productos:', error);
+        productosTbody.innerHTML = '<tr><td colspan="6">Error al cargar productos.</td></tr>';
+    }
+}
+
+function renderProducts() {
+    if (currentProducts.length === 0) {
+        productosTbody.innerHTML = '<tr><td colspan="6" class="loading-msg">No hay productos registrados.</td></tr>';
+        return;
+    }
+
+    productosTbody.innerHTML = '';
+    currentProducts.forEach(prod => {
+        const tr = document.createElement('tr');
+        const defaultImg = 'https://via.placeholder.com/50';
+        tr.innerHTML = `
+            <td><img src="${prod.imagen || defaultImg}" alt="${prod.nombre}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;"></td>
+            <td>${prod.nombre}</td>
+            <td>S/ ${prod.precio.toFixed(2)}</td>
+            <td>${prod.stock}</td>
+            <td><span class="status-badge status-${prod.estado}">${prod.estado.toUpperCase()}</span></td>
+            <td>
+                <button class="btn-edit" onclick="editProduct('${prod.id}')">Editar</button>
+            </td>
+        `;
+        productosTbody.appendChild(tr);
+    });
+}
+
+// Modal Productos
+btnNuevoProducto.addEventListener('click', () => {
+    document.getElementById('product-form').reset();
+    document.getElementById('prod-id').value = '';
+    document.getElementById('product-modal-title').innerText = 'Nuevo Producto';
+    productModal.style.display = 'block';
+});
+
+closeProductModal.addEventListener('click', () => {
+    productModal.style.display = 'none';
+});
+
+// Guardar / Actualizar Producto
+productForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('prod-id').value;
+    const producto = {
+        nombre: document.getElementById('prod-nombre').value,
+        descripcion: document.getElementById('prod-desc').value,
+        precio: parseFloat(document.getElementById('prod-precio').value),
+        stock: parseInt(document.getElementById('prod-stock').value),
+        imagen: document.getElementById('prod-imagen').value,
+        estado: document.getElementById('prod-estado').value
+    };
+
+    try {
+        if (id) {
+            // Actualizar
+            const { error } = await window.supabaseClient.from('productos').update(producto).eq('id', id);
+            if (error) throw error;
+        } else {
+            // Insertar
+            const { error } = await window.supabaseClient.from('productos').insert([producto]);
+            if (error) throw error;
+        }
+        productModal.style.display = 'none';
+        loadProducts(); // Recargar lista
+    } catch (error) {
+        console.error('Error guardando producto:', error);
+        alert('Error al guardar el producto.');
+    }
+});
+
+window.editProduct = function(id) {
+    const prod = currentProducts.find(p => p.id === id);
+    if (!prod) return;
+    
+    document.getElementById('prod-id').value = prod.id;
+    document.getElementById('prod-nombre').value = prod.nombre;
+    document.getElementById('prod-desc').value = prod.descripcion;
+    document.getElementById('prod-precio').value = prod.precio;
+    document.getElementById('prod-stock').value = prod.stock;
+    document.getElementById('prod-imagen').value = prod.imagen || '';
+    document.getElementById('prod-estado').value = prod.estado;
+    
+    document.getElementById('product-modal-title').innerText = 'Editar Producto';
+    productModal.style.display = 'block';
+};
+
