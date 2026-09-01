@@ -104,7 +104,7 @@ function renderProducts() {
 
 function addToCart(productId) {
     if (!isBusinessOpen()) {
-        alert("¡Lo sentimos! Estamos fuera de horario de atención. Volvemos a las 6:00 PM.");
+        document.getElementById('closed-modal').style.display = 'block';
         return;
     }
 
@@ -228,6 +228,7 @@ window.addEventListener('click', (e) => {
     if (e.target === cartModal) cartModal.style.display = 'none';
     if (e.target === successModal) successModal.style.display = 'none';
     if (e.target === ordersModal) ordersModal.style.display = 'none';
+    if (e.target.id === 'closed-modal') e.target.style.display = 'none';
 });
 
 async function loadMyOrders() {
