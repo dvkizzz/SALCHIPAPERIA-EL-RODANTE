@@ -271,22 +271,31 @@ header h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: 0.5px; }
 }
 .form-group select option { background: #152238; color: white; }
 
+/* Responsive Adjustments for Tablets and Small Laptops */
+@media (max-width: 1024px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .sidebar { width: 220px; }
+    .sidebar h2 { font-size: 1.5rem; padding: 1.5rem 1rem; }
+    header { padding: 1.5rem; }
+}
+
 /* Responsive Adjustments for Mobile */
 @media (max-width: 768px) {
-    body { flex-direction: column; overflow: auto; height: auto; }
+    body { height: auto; overflow: auto; }
+    .dashboard-container { flex-direction: column; overflow: visible; height: auto; }
     .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--glass-border); }
     .sidebar nav ul { display: flex; flex-wrap: wrap; justify-content: center; padding: 0.5rem; }
-    .sidebar nav ul li { flex: 1; text-align: center; }
+    .sidebar nav ul li { flex: 1; text-align: center; min-width: 120px; }
     .sidebar nav ul li a { padding: 0.8rem; font-size: 0.9rem; }
     .sidebar nav ul li.active a, .sidebar nav ul li a:hover { padding-left: 0.8rem; border-left: none; border-bottom: 4px solid var(--primary-color); }
     .sidebar nav ul li.active a::before { width: 100%; height: 4px; left: 0; bottom: 0; top: auto; }
-    .main-content { overflow: visible; }
-    header { flex-direction: column; gap: 1rem; text-align: center; }
-    .stats-grid { grid-template-columns: 1fr; padding: 1rem; }
+    .main-content { overflow: visible; height: auto; flex: none; }
+    header { flex-direction: column; gap: 1rem; text-align: center; padding: 1rem; }
+    .stats-grid { grid-template-columns: 1fr; padding: 1rem; gap: 1rem; }
     .orders-section, .productos-section { padding: 0 1rem 1rem; }
     .productos-header { flex-direction: column; gap: 1rem; text-align: center; }
     .order-actions { flex-direction: column; }
     .btn-action { width: 100%; }
     .order-info-grid { grid-template-columns: 1fr; gap: 1rem; }
-    .modal-content { padding: 1.5rem; margin: 10% auto; width: 95%;}
+    .modal-content { padding: 1.5rem; margin: 10% auto; width: 95%; }
 }
