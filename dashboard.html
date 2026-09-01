@@ -60,7 +60,6 @@
                             </tr>
                         </thead>
                         <tbody id="orders-tbody">
-                            <!-- Filas inyectadas por JS -->
                             <tr><td colspan="6" class="loading-msg">Cargando pedidos...</td></tr>
                         </tbody>
                     </table>
@@ -92,7 +91,6 @@
         </main>
     </div>
 
-    <!-- Modal Producto -->
     <div id="product-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn" id="close-product-modal">&times;</span>
@@ -131,20 +129,15 @@
         </div>
     </div>
 
-    <!-- Modal Detalles del Pedido -->
     <div id="order-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn" id="close-modal">&times;</span>
-            <div id="order-details-content">
-                <!-- Contenido inyectado por JS -->
-            </div>
+            <div id="order-details-content"></div>
             <div class="order-actions" id="order-actions">
-                <!-- Botones inyectados por JS según el estado -->
             </div>
         </div>
     </div>
 
-    <!-- Audio de notificación (Opcional, requiere interacción previa en navegadores) -->
     <audio id="notification-sound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" preload="auto"></audio>
 
     <script src="js/supabase-client.js"></script>
