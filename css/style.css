@@ -449,3 +449,16 @@ main {
 .tracking-step.current { color: var(--neon-blue); font-weight: bold; text-shadow: 0 0 5px rgba(0,229,255,0.3); transform: scale(1.05); transform-origin: left;}
 .tracking-step.rejected { color: var(--neon-red); font-weight: bold; text-shadow: 0 0 5px rgba(255,23,68,0.3);}
 .tracking-icon { font-size: 1.5em; width: 30px; text-align: center; }
+
+/* Responsive Adjustments for Mobile */
+@media (max-width: 768px) {
+    .header-container { flex-direction: column; gap: 1rem; padding: 1rem; }
+    h1 { font-size: 1.5rem; text-align: center; }
+    .menu-section h2 { font-size: 1.5rem; }
+    main { padding: 0 1rem; margin: 1rem auto; }
+    .product-card { padding: 1rem; }
+    .modal-content { width: 95%; padding: 1.5rem; margin: 10% auto; }
+    .cart-item { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    .cart-item-actions { width: 100%; justify-content: space-between; margin-top: 0.5rem; }
+    .cart-summary { font-size: 1.1rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+}
